@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import TitleOfProyect from "./components/titles"; 
+import Head from "./components/head";
+import TextArea from "./components/textArea";
+import Previewer from "./components/preview";
+import { sampleText } from "./sampleText";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [ currenTab, setCurrenTab] = useState("editor")
+  const [ currentCode, setCurrenCode ] = useState(sampleText)
+
+  useEffect(() => {
+    console.log("✨", currenTab);
+    console.log("✨", currentCode);
+  }, [currenTab])
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <TitleOfProyect
+      title="Build a Markdown Previewer"
+      />
+      <div className="bg-moon-overlay">
+        <Head 
+        setTab={(tab) =>{
+          setCurrenTab(tab)
+        }}
+        />
+        <div className="w-screen min-h-screen grid grid-flow-col">
+          <div className={`${ currenTab !== 'editor' && 'hidden'} landscape:block landscape:w-[50vw]`}>
+            <TextArea 
+            setcode={(code) => {
+              setCurrenCode(code)
+            }}
+            currentCode={currentCode}
+            />
+            <br/>
+          </div>
+          <div className={`${ currenTab !== 'Previewer' && 'hidden'} landscape:block`}>
+            <Previewer code={currentCode}/>
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
